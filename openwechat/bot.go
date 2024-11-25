@@ -4,9 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"github.com/mdp/qrterminal"
 	"io"
 	"log"
 	"net/url"
+	"os"
 	"os/exec"
 	"runtime"
 )
@@ -391,15 +393,29 @@ func GetQrcodeUrl(uuid string) string {
 	return qrcode + uuid
 }
 
+func GetTerminalQrcodeUrl(uuid string) string {
+	return qrcodeterminal + uuid
+}
+
 // PrintlnQrcodeUrl 打印登录二维码
 func PrintlnQrcodeUrl(uuid string) {
 	println("访问下面网址扫描二维码登录")
-	qrcodeUrl := GetQrcodeUrl(uuid)
+	qrcodeUrl := GetTerminalQrcodeUrl(uuid)
 	println(qrcodeUrl)
 
-	// browser open the login url
-	_ = open(qrcodeUrl)
+	qrterminal.Generate(qrcodeUrl, qrterminal.L, os.Stdout) // browser open the login url
+	//_ = open(qrcodeUrl)
 }
+
+//// PrintlnQrcodeUrl 打印登录二维码
+//func PrintlnQrcodeUrl(uuid string) {
+//	println("访问下面网址扫描二维码登录")
+//	qrcodeUrl := GetQrcodeUrl(uuid)
+//	println(qrcodeUrl)
+//
+//	// browser open the login url
+//	_ = open(qrcodeUrl)
+//}
 
 // open opens the specified URL in the default browser of the user.
 func open(url string) error {
